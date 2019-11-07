@@ -6,122 +6,131 @@
 <#-- The tag above means: insert everything in this file
 into the {body} of the default.hbs template -->
 
-<header class="site-header outer">
-    <div class="inner">
-        <#include "partials/site-nav.ftl">
-    </div>
-</header>
+    <header class="site-header outer">
+        <div class="inner">
+            <#include "partials/site-nav.ftl">
+        </div>
+    </header>
 
 <#-- Everything inside the #post tags pulls data from the post -->
 
-<main id="site-main" class="site-main outer">
-    <div class="inner">
+    <main id="site-main" class="site-main outer">
+        <div class="inner">
 
-        <article class="post-full post <#if !post.thumbnail??>no-image</#if>">
+            <article class="post-full post <#if !post.thumbnail??>no-image</#if>">
 
-            <header class="post-full-header">
-                <section class="post-full-meta">
-                    <time class="post-full-meta-date" datetime="${post.createTime?string('yyyy-MM-dd')}">${post.createTime?string('d MMM,yyyy')}</time>
-                    <#if post.categories?? && post.categories?size gt 0>
-                    <span class="date-divider">/</span> <a href="${context!}/categories/${post.categories[0].slugName}">${post.categories[0].name}</a>
+                <header class="post-full-header" style="padding: 0vw 0vw 6vw">
+                    <#--                <section class="post-full-meta">-->
+                    <#--                    <time class="post-full-meta-date" datetime="${post.createTime?string('yyyy-MM-dd')}">${post.createTime?string('d MMM,yyyy')}</time>-->
+                    <#--                    <#if post.categories?? && post.categories?size gt 0>-->
+                    <#--                    <span class="date-divider">/</span> <a href="${context!}/categories/${post.categories[0].slugName}">${post.categories[0].name}1111</a>-->
+                    <#--                    </#if>-->
+                    <#--                </section>-->
+                    <#--                <h1 class="post-full-title">${post.title}</h1>-->
+
+                    <#if post.thumbnail?? && post.thumbnail!=''>
+                        <figure class="post-full-image" style="background-image: url(${post.thumbnail})    ;margin:0 -18vw -165px;height: 300px;display:block;background-color: rgba(0,0,0,.5)">
+                        </figure>
                     </#if>
+                </header>
+
+
+
+                <section class="post-full-content">
+                    <h1 class="post-full-title1">${post.title}</h1>
+                    <section class="post-full-meta">
+                        <time class="post-full-meta-date" datetime="${post.createTime?string('yyyy-MM-dd')}">${post.createTime?string('d MMM,yyyy')}</time>
+                        <#if post.categories?? && post.categories?size gt 0>
+                            <span class="date-divider">/</span> <a href="${context!}/categories/${post.categories[0].slugName}">${post.categories[0].name}</a>
+                        </#if>
+                    </section>
+                    <div class="post-content">
+                        ${post.formatContent!}
+                        <#include "partials/post-copyright.ftl">
+                    </div>
                 </section>
-                <h1 class="post-full-title">${post.title}</h1>
-            </header>
 
-            <#if post.thumbnail?? && post.thumbnail!=''>
-            <figure class="post-full-image" style="background-image: url(${post.thumbnail})">
-            </figure>
-            </#if>
+                <#-- Email subscribe form at the bottom of the page -->
 
-            <section class="post-full-content">
-                <div class="post-content">
-                    ${post.formatContent!}
-                    <#include "partials/post-copyright.ftl">
-                </div>
-            </section>
+                <footer class="post-full-footer">
 
-            <#-- Email subscribe form at the bottom of the page -->
+                    <#-- There are two options for how we display the byline/author-info.
+                    If the post has more than one author, we load a specific template
+                    from includes/byline-multiple.hbs, otherwise, we just use the
+                    default byline. -->
 
-            <footer class="post-full-footer">
+                    <#include "partials/byline-single.ftl">
 
-                <#-- There are two options for how we display the byline/author-info.
-                If the post has more than one author, we load a specific template
-                from includes/byline-multiple.hbs, otherwise, we just use the
-                default byline. -->
+                </footer>
 
-                <#include "partials/byline-single.ftl">
+                <section class="post-full-comments">
+                    <#-- If you want to embed comments, this is a good place to do it! -->
+                    <#include "module/comment.ftl">
+                    <@comment post=post type="post" />
+                </section>
 
-            </footer>
-
-            <section class="post-full-comments">
-                <#-- If you want to embed comments, this is a good place to do it! -->
-                <#include "module/comment.ftl">
-                <@comment post=post type="post" />
-            </section>
-
-        </article>
-
-    </div>
-</main>
-
-<#-- Links to Previous/Next posts -->
-<aside class="read-next outer">
-    <div class="inner">
-        <div class="read-next-feed">
-            <#--<#if post.categories?? && post.categories?size gt 0>-->
-            <#--{{#get "posts" filter="tags:{{primary_tag.slug}}+id:-{{id}}" limit="3" as |related_posts|}}-->
-                <#--{{#if related_posts}}-->
-                <#--<article class="read-next-card"-->
-                    <#--{{#if ../primary_tag.feature_image}}-->
-                        <#--style="background-image: url({{../primary_tag.feature_image}})"-->
-                    <#--{{else}}-->
-                        <#--{{#if @blog.cover_image}}-->
-                            <#--style="background-image: url({{@blog.cover_image}})"{{/if}}-->
-                    <#--{{/if}}-->
-                <#-->-->
-                    <#--<header class="read-next-card-header">-->
-                        <#--<small class="read-next-card-header-sitetitle">&mdash; {{@blog.title}} &mdash;</small>-->
-                        <#--{{#../primary_tag}}-->
-                        <#--<h3 class="read-next-card-header-title"><a href="{{url}}">{{name}}</a></h3>-->
-                        <#--{{/../primary_tag}}-->
-                    <#--</header>-->
-                    <#--<div class="read-next-divider">{{> "icons/infinity"}}</div>-->
-                    <#--<div class="read-next-card-content">-->
-                        <#--<ul>-->
-                            <#--{{#foreach related_posts}}-->
-                            <#--<li><a href="{{url}}">{{title}}</a></li>-->
-                            <#--{{/foreach}}-->
-                        <#--</ul>-->
-                    <#--</div>-->
-                    <#--<footer class="read-next-card-footer">-->
-                        <#--<a href="/categories/${}">{{plural meta.pagination.total empty='No posts' singular='% post' plural='See all % posts'}} →</a>-->
-                    <#--</footer>-->
-                <#--</article>-->
-                <#--{{/if}}-->
-            <#--{{/get}}-->
-            <#--</#if>-->
-
-            <#-- If there's a next post, display it using the same markup included from - partials/post-card.hbs -->
-            <#if afterPost??>
-                <@post_card afterPost></@post_card>
-            </#if>
-
-            <#-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
-            <#if beforePost??>
-                <@post_card beforePost></@post_card>
-            </#if>
+            </article>
 
         </div>
-    </div>
-</aside>
+    </main>
+
+<#-- Links to Previous/Next posts -->
+    <aside class="read-next outer">
+        <div class="inner">
+            <div class="read-next-feed">
+                <#--<#if post.categories?? && post.categories?size gt 0>-->
+                <#--{{#get "posts" filter="tags:{{primary_tag.slug}}+id:-{{id}}" limit="3" as |related_posts|}}-->
+                <#--{{#if related_posts}}-->
+                <#--<article class="read-next-card"-->
+                <#--{{#if ../primary_tag.feature_image}}-->
+                <#--style="background-image: url({{../primary_tag.feature_image}})"-->
+                <#--{{else}}-->
+                <#--{{#if @blog.cover_image}}-->
+                <#--style="background-image: url({{@blog.cover_image}})"{{/if}}-->
+                <#--{{/if}}-->
+                <#-->-->
+                <#--<header class="read-next-card-header">-->
+                <#--<small class="read-next-card-header-sitetitle">&mdash; {{@blog.title}} &mdash;</small>-->
+                <#--{{#../primary_tag}}-->
+                <#--<h3 class="read-next-card-header-title"><a href="{{url}}">{{name}}</a></h3>-->
+                <#--{{/../primary_tag}}-->
+                <#--</header>-->
+                <#--<div class="read-next-divider">{{> "icons/infinity"}}</div>-->
+                <#--<div class="read-next-card-content">-->
+                <#--<ul>-->
+                <#--{{#foreach related_posts}}-->
+                <#--<li><a href="{{url}}">{{title}}</a></li>-->
+                <#--{{/foreach}}-->
+                <#--</ul>-->
+                <#--</div>-->
+                <#--<footer class="read-next-card-footer">-->
+                <#--<a href="/categories/${}">{{plural meta.pagination.total empty='No posts' singular='% post' plural='See all % posts'}} →</a>-->
+                <#--</footer>-->
+                <#--</article>-->
+                <#--{{/if}}-->
+                <#--{{/get}}-->
+                <#--</#if>-->
+
+                <#-- If there's a next post, display it using the same markup included from - partials/post-card.hbs -->
+                <#if afterPost??>
+                    <@post_card afterPost></@post_card>
+                </#if>
+
+                <#-- If there's a previous post, display it using the same markup included from - partials/post-card.hbs -->
+                <#if beforePost??>
+                    <@post_card beforePost></@post_card>
+                </#if>
+
+            </div>
+        </div>
+    </aside>
 
 <#-- Floating header which appears on-scroll, included from includes/floating-header.hbs -->
-<@floating_header title="${post.title}"></@floating_header>
+    <@floating_header title="${post.title}"></@floating_header>
 
 </@default>
 <@scripts>
-    <#-- The #block helper will pull in data from the #contentFor other template files. In this case, there's some JavaScript which we only want to use in post.hbs, but it needs to be included down here, after jQuery has already loaded. -->
+<#-- The #block helper will pull in data from the #contentFor other template files. In this case, there's some JavaScript which we only want to use in post.hbs, but it needs to be included down here, after jQuery has already loaded. -->
     <script>
 
         // NOTE: Scroll performance is poor in Safari
@@ -186,6 +195,6 @@ into the {body} of the default.hbs template -->
 
         });
     </script>
-    <#-- Ghost outputs important scripts and data with this tag - it should always be the very last thing before the closing body tag -->
-    <#-- {{ghost_foot}} -->
+<#-- Ghost outputs important scripts and data with this tag - it should always be the very last thing before the closing body tag -->
+<#-- {{ghost_foot}} -->
 </@scripts>
